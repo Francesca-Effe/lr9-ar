@@ -157,7 +157,7 @@
     </div>
 
     <a-scene id="ar-container"
-        mindar-image="imageTargetSrc: ./assets/targets.mind; autoStart: true; uiScanning: no; uiLoading: no;"
+        mindar-image="imageTargetSrc:images/targets.mind; autoStart: true; uiScanning: no; uiLoading: no;"
         color-space="sRGB" embedded renderer="colorManagement: true, physicallyCorrectLights"
         vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: true">
         <a-assets></a-assets>
@@ -175,7 +175,7 @@
         const videoWrap = document.querySelector('#fullscreen-video-wrap');
         const video = document.querySelector('#lr9video-fullscreen');
 
-        video.src = './assets/lr9-ar.mp4';
+        video.src = 'images/targets.mind';
 
         sceneEl.addEventListener('loaded', () => {
             loadingScreen.style.display = 'none';
