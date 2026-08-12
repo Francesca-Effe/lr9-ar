@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+    <title>LR9 by Lorenzo</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+        }
+
+        #video-wrap {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100dvh;
+        }
+
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #unmute-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10;
+            background: #ff7a00;
+            color: #000;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+
+        #tap-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            color: #ff7a00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            text-align: center;
+            z-index: 20;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #tap-overlay.hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="video-wrap">
+        <video id="video" src="images/lr9-ar.mp4" playsinline webkit-playsinline loop muted></video>
+    </div>
+
+    <button id="unmute-btn" style="display:none;">🔊 Activer le son</button>
+
+    <!-- Some browsers block autoplay even when muted until a tap happens -->
+    <div id="tap-overlay">Touchez l'écran pour lancer la vidéo</div>
+
+    <script>
+        const video = document.querySelector('#video');
+        const unmuteBtn = document.querySelector('#unmute-btn');
+        const tapOverlay = document.querySelector('#tap-overlay');
+
+        // Try autoplay immediately on page load (muted autoplay is usually allowed)
+        video.play()
+            .then(() => {
+                tapOverlay.classList.add('hidden');
+                unmuteBtn.style.display = 'block';
+            })
+            .catch(() => {
+                // Autoplay blocked - wait for a tap
+            });
+
+        tapOverlay.addEventListener('click', () => {
+            video.play();
+            tapOverlay.classList.add('hidden');
+            unmuteBtn.style.display = 'block';
+        });
+
+        unmuteBtn.addEventListener('click', () => {
+            video.muted = false;
+            unmuteBtn.style.display = 'none';
+        });
+    </script>
+
+</body>
+
+</html>
