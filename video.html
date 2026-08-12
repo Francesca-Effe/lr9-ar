@@ -5,6 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
     <title>LR9 by Lorenzo</title>
+
+    <!-- TEMPORARY DEBUG CONSOLE - remove once everything works -->
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init();</script>
+
     <style>
         html,
         body {
@@ -35,6 +40,24 @@
             width: auto;
             height: auto;
         }
+
+        #error-msg {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            color: #ff4444;
+            font-family: monospace;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            background: #000;
+            z-index: 50;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
     </style>
 </head>
 
@@ -43,10 +66,22 @@
     <div id="video-wrap">
         <video id="video" src="./lr9-ar.mp4" playsinline webkit-playsinline loop muted autoplay></video>
     </div>
+    <div id="error-msg"></div>
 
     <script>
         const wrap = document.querySelector('#video-wrap');
         const video = document.querySelector('#video');
+        const errorMsg = document.querySelector('#error-msg');
+
+        function showError(text) {
+            errorMsg.textContent = text;
+            errorMsg.style.display = 'flex';
+        }
+
+        video.addEventListener('error', () => {
+            const err = video.error;
+            showError('VIDEO ERROR\ncode: ' + (err ? err.code : '?') + '\n' + (err ? err.message : 'unknown') + '\n\nsrc: ' + video.currentSrc);
+        });
 
         function sizeToViewport() {
             wrap.style.height = window.innerHeight + 'px';
@@ -59,7 +94,10 @@
             console.log('Video native size:', video.videoWidth, 'x', video.videoHeight);
         });
 
-        video.play().catch(err => console.warn('Autoplay issue:', err));
+        video.play().catch(err => {
+            console.warn('Autoplay issue:', err);
+            showError('AUTOPLAY BLOCKED\n' + err.name + '\n' + err.message);
+        });
     </script>
 
 </body>
